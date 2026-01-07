@@ -82,11 +82,14 @@ public final class Constants {
       BackLeft,
       FrontLeft);
   }
+  //Constants for PathPlanner
   public static class PathPlanner{
+    //Translation constants for PathPlanner's Controller
     public static final double translation_kP = 0;
     public static final double translation_kI = 0;
     public static final double translation_kD = 0;
-    
+
+    //Rotation constants for PathPlanner's Controller
     public static final double rotation_kP = 0;
     public static final double rotation_kI = 0;
     public static final double rotation_kD = 0;

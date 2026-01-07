@@ -5,12 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,6 +38,9 @@ public class RobotContainer {
 
   Joystick right_joystick = new Joystick(1);
 
+  //Creates a SendableChooser Command 
+  private final SendableChooser<Command> auto_Chooser;
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -43,6 +50,11 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    auto_Chooser = AutoBuilder.buildAutoChooser();
+    //Puts the data on the Dashboard
+    SmartDashboard.putData("Auto Chooser", auto_Chooser);
+
     this.swerve_drivetrain.setDefaultCommand(new Drive(swerve_drivetrain, left_joystick, right_joystick));
   }
 
@@ -74,6 +86,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+
+    //Runs the selected Auto 
+    return auto_Chooser.getSelected();
   }
 }
