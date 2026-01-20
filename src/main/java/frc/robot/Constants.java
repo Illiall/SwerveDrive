@@ -23,26 +23,26 @@ public final class Constants {
   }
   public static class Drivetrain{
     public static class SwerveModule0{
-      public static final int drive_id = 54;
-      public static final int turn_id = 58;
+      public static final int drive_id = 36;
+      public static final int turn_id = 61;
       public static final int CAN_coder_id = 8;
       public static final Rotation2d turn_offset = Rotation2d.fromDegrees(339.3);
     }
     public static class SwerveModule1{
-      public static final int drive_id = 36;
+      public static final int drive_id = 53;
       public static final int turn_id = 52;
       public static final int CAN_coder_id = 1;
       public static final Rotation2d turn_offset = Rotation2d.fromDegrees(187.3);
     }
     public static class SwerveModule2{
-      public static final int drive_id = 53;
-      public static final int turn_id = 61;
+      public static final int drive_id = 55;
+      public static final int turn_id = 59;
       public static final int CAN_coder_id = 2;
       public static final Rotation2d turn_offset = Rotation2d.fromDegrees(166.1);
     }
     public static class SwerveModule3{
-      public static final int drive_id = 55;
-      public static final int turn_id = 59;
+      public static final int drive_id = 54;
+      public static final int turn_id = 58;
       public static final int CAN_coder_id = 3;
       public static final Rotation2d turn_offset = Rotation2d.fromDegrees(148.2);
     }
