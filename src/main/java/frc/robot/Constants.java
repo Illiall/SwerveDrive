@@ -21,7 +21,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  //New Module ID's
+  //New Module ID
   public static class Drivetrain{
     public static class SwerveModule0{
       public static final int drive_id = 36;
