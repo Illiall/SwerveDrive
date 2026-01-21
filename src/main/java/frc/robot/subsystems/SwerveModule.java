@@ -102,6 +102,8 @@ public class SwerveModule {
 
         this.translation_motor.configure(translation_motor_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         this.rotation_motor.configure(rotation_motor_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        this.rotation_PID = new PIDController(Constants.Drivetrain.PID_constants.kP, Constants.Drivetrain.PID_constants.kI, Constants.Drivetrain.PID_constants.kD);
     }
 
     public void reset_encoder(){
@@ -110,22 +112,22 @@ public class SwerveModule {
     }
 
     @SuppressWarnings("removal")
-    public Rotation2d getCANCoder(){
+    public Rotation2d get_CANCoder(){
         return Rotation2d.fromDegrees(this.rotation_can_coder.getAbsolutePosition());
     }
 
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(this.translation_encoder.getVelocity(), getCANCoder());
+    public SwerveModuleState get_state(){
+        return new SwerveModuleState(this.translation_encoder.getVelocity(), get_CANCoder());
     }
 
     //Used in PathPlanner
     //Returns the SwerveModulePosition using the translation encoder's position and the CANCoder
-    public SwerveModulePosition getModulePosition(){
-        return new SwerveModulePosition(translation_encoder.getPosition(), getCANCoder());
+    public SwerveModulePosition get_module_position(){
+        return new SwerveModulePosition(translation_encoder.getPosition(), get_CANCoder());
     }
 
-    public void setDesiredState(SwerveModuleState desired_state){
-        current_state = this.getState();
+    public void set_desired_state(SwerveModuleState desired_state){
+        current_state = this.get_state();
         current_rotation = current_state.angle.minus(rotation_offset);
 
         desired_state.optimize(current_rotation);

@@ -26,15 +26,15 @@ public class Drivetrain extends SubsystemBase {
   
   PigeonIMU Gyro;
 
-  SwerveDrivePoseEstimator PoseEstimator;
+  SwerveDrivePoseEstimator pose_estimator;
 
   RobotConfig config;
 
   PPHolonomicDriveController Controller;
 
-  PIDConstants translationConstants;
+  PIDConstants translation_constants;
 
-  PIDConstants rotationConstants;
+  PIDConstants rotation_constants;
 
   private SwerveModule[] drive;
 
@@ -44,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
 
     Gyro.configFactoryDefault();
 
-    SetYaw(0);
+    set_yaw(0);
 
     this.drive = new SwerveModule[] {
       new SwerveModule(0, Constants.Drivetrain.SwerveModule0.turn_id, Constants.Drivetrain.SwerveModule0.drive_id, Constants.Drivetrain.SwerveModule0.CAN_coder_id, Constants.Drivetrain.SwerveModule0.turn_offset),
@@ -54,29 +54,29 @@ public class Drivetrain extends SubsystemBase {
     };
 
     //Creates translation constants for the controller 
-    translationConstants = new PIDConstants(
+    translation_constants = new PIDConstants(
       Constants.PathPlanner.translation_kP,
       Constants.PathPlanner.translation_kI,
       Constants.PathPlanner.translation_kD);
     
     //Creates rotation constants for the controller
-    rotationConstants = new PIDConstants(
+    rotation_constants = new PIDConstants(
       Constants.PathPlanner.rotation_kP,
       Constants.PathPlanner.rotation_kI,
       Constants.PathPlanner.rotation_kD);
     
     //Creates the Controller to use in the AutoBuilder
-    Controller = new PPHolonomicDriveController(translationConstants, rotationConstants);
+    Controller = new PPHolonomicDriveController(translation_constants, rotation_constants);
 
     //Pose Estimator to estimate robots current position
-    PoseEstimator = new SwerveDrivePoseEstimator(
+    pose_estimator = new SwerveDrivePoseEstimator(
       Constants.Drivetrain.swerve_kinematics, 
-      getYaw(),
+      get_yaw(),
       new SwerveModulePosition[]{
-        this.drive[0].getModulePosition(),
-        this.drive[1].getModulePosition(),
-        this.drive[2].getModulePosition(),
-        this.drive[3].getModulePosition()
+        this.drive[0].get_module_position(),
+        this.drive[1].get_module_position(),
+        this.drive[2].get_module_position(),
+        this.drive[3].get_module_position()
       },
       new Pose2d());
 
@@ -90,36 +90,36 @@ public class Drivetrain extends SubsystemBase {
 
       //Configures the AutoBuilder
       AutoBuilder.configure(
-        this::get_Pose, 
+        this::get_pose, 
         this::reset_pose, 
-        this::getRobotRelativeSpeed, 
-        (speed, feedforward) -> DriveRobotRelative(speed), 
+        this::get_robot_relative_speed, 
+        (speed, feedforward) -> drive_robot_relative(speed), 
         Controller, 
         config, 
-        () -> flipTeam(), 
+        () -> flip_team(), 
         this);
   }
 
-  public void SetYaw(double yaw){
+  public void set_yaw(double yaw){
     Gyro.setYaw(yaw);
   }
 
-  public void Reset_Gyro(){
+  public void reset_gyro(){
     Gyro.setYaw(0);
   }
 
-  public Rotation2d getYaw(){
+  public Rotation2d get_yaw(){
     return Rotation2d.fromDegrees(Gyro.getYaw());
   }
 
   public void drive(Translation2d translation, double rotation, boolean isFieldRelative){
     SwerveModuleState[] swerveModuleState = Constants.Drivetrain.swerve_kinematics.toSwerveModuleStates(
-      isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, getYaw()):
+      isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, get_yaw()):
       new ChassisSpeeds(translation.getX(), translation.getY(), rotation)); {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleState, Constants.Drivetrain.max_speed);
       
       for(SwerveModule module: this.drive){
-        module.setDesiredState(swerveModuleState[module.module_number]);
+        module.set_desired_state(swerveModuleState[module.module_number]);
       }
       }
   }
@@ -127,23 +127,23 @@ public class Drivetrain extends SubsystemBase {
   //Pathplanner Code
 
   //Function that returns a Estimated Position as a Pose2D variable from the Pose Estimator
-  public Pose2d get_Pose(){
-      return this.PoseEstimator.getEstimatedPosition();
+  public Pose2d get_pose(){
+      return this.pose_estimator.getEstimatedPosition();
   }
 
   //Resets the pose of the Robot
   //Uses current rotation, Module positions, and the current pose
   public void reset_pose(Pose2d pose){
-    this.PoseEstimator.resetPosition(getYaw(), swerveModulePositions(), pose);
+    this.pose_estimator.resetPosition(get_yaw(), swerve_module_positions(), pose);
   }
 
   //Returns the RelativeSpeed of the Robot using the Swerve_Kinematic to access the module state
-  public ChassisSpeeds getRobotRelativeSpeed(){
-    return Constants.Drivetrain.swerve_kinematics.toChassisSpeeds(getModuleState());
+  public ChassisSpeeds get_robot_relative_speed(){
+    return Constants.Drivetrain.swerve_kinematics.toChassisSpeeds(get_module_state());
   }
 
   //Flips the path's for different team colors
-  public boolean flipTeam(){
+  public boolean flip_team(){
     var alliance = DriverStation.getAlliance();
     if(alliance.isPresent()){
       return alliance.get() == DriverStation.Alliance.Red;
@@ -154,43 +154,44 @@ public class Drivetrain extends SubsystemBase {
 
   //Pathplanner Drive
   //Uses speed(ChassisSpeed) to rotate the motors
-  public void DriveRobotRelative(ChassisSpeeds speed){
+  public void drive_robot_relative(ChassisSpeeds speed){
     SwerveModuleState[] ModuleStates = Constants.Drivetrain.swerve_kinematics.toSwerveModuleStates(speed);
     SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, Constants.Drivetrain.max_speed);
     for(SwerveModule module:this.drive){
-      module.setDesiredState(ModuleStates[module.module_number]);
+      module.set_desired_state(ModuleStates[module.module_number]);
     }
   }
 
   //Returns the SwerveModulePositions
-  public SwerveModulePosition[] swerveModulePositions(){
+  public SwerveModulePosition[] swerve_module_positions(){
     return new SwerveModulePosition[] {
-      this.drive[0].getModulePosition(),
-      this.drive[1].getModulePosition(),
-      this.drive[2].getModulePosition(),
-      this.drive[3].getModulePosition()
+      this.drive[0].get_module_position(),
+      this.drive[1].get_module_position(),
+      this.drive[2].get_module_position(),
+      this.drive[3].get_module_position()
     };
   }
 
   //Returns the SwerveModuleState 
-  public SwerveModuleState[] getModuleState(){
+  public SwerveModuleState[] get_module_state(){
     return new SwerveModuleState[]{
-      this.drive[0].getState(),
-      this.drive[1].getState(),
-      this.drive[2].getState(),
-      this.drive[3].getState()};
+      this.drive[0].get_state(),
+      this.drive[1].get_state(),
+      this.drive[2].get_state(),
+      this.drive[3].get_state()
+    };
   }
 
   @Override
   public void periodic() {
     //Updates the Pose Estimator
-    PoseEstimator.update(
-      getYaw(), 
+    pose_estimator.update(
+      get_yaw(), 
       new SwerveModulePosition[]{
-        this.drive[0].getModulePosition(),
-        this.drive[1].getModulePosition(),
-        this.drive[2].getModulePosition(),
-        this.drive[3].getModulePosition()
+        this.drive[0].get_module_position(),
+        this.drive[1].get_module_position(),
+        this.drive[2].get_module_position(),
+        this.drive[3].get_module_position()
       });
   }
 }

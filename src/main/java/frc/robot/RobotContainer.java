@@ -76,7 +76,7 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    reset_gyro.onTrue(new InstantCommand(() -> swerve_drivetrain.Reset_Gyro()));
+    reset_gyro.onTrue(new InstantCommand(() -> swerve_drivetrain.reset_gyro()));
   }
 
   /**
