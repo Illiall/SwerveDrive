@@ -80,24 +80,23 @@ public class Drivetrain extends SubsystemBase {
       },
       new Pose2d());
 
-      //Tries to recieve information from PathPlanner GUI settings to load into the autobuilder
-      try{
-        config = RobotConfig.fromGUISettings();
-      //If Failed will return an error
-      }catch(Exception exception){
-        exception.printStackTrace();
-      }
-
-      //Configures the AutoBuilder
-      AutoBuilder.configure(
-        this::get_pose, 
-        this::reset_pose, 
-        this::get_robot_relative_speed, 
-        (speed, feedforward) -> drive_robot_relative(speed), 
-        Controller, 
-        config, 
-        () -> flip_team(), 
-        this);
+    //Tries to recieve information from PathPlanner GUI settings to load into the autobuilder
+    try{
+      config = RobotConfig.fromGUISettings();
+    //If Failed will return an error
+    }catch(Exception exception){
+      exception.printStackTrace();
+    }
+     //Configures the AutoBuilder
+    AutoBuilder.configure(
+      this::get_pose, 
+      this::reset_pose, 
+      this::get_robot_relative_speed, 
+      (speed, feedforward) -> drive_robot_relative(speed), 
+      Controller, 
+      config, 
+      () -> flip_team(), 
+      this);
   }
 
   public void set_yaw(double yaw){
