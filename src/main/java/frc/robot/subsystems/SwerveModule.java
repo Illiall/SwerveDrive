@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 
@@ -147,7 +148,12 @@ public class SwerveModule {
 
         rotation_motor.set(rotation_speed);
 
-        translation_motor.set(translation_speed);
+        translation_motor.set(translation_speed * 0.25);
+
+        SmartDashboard.putNumber("difference " + module_number, difference);
+        SmartDashboard.putNumber("Rotation Speed " + module_number, rotation_speed);
+        SmartDashboard.putNumber("Translation speed " + module_number, translation_speed);
+        SmartDashboard.putNumber("CANCoder Mod " + module_number, get_CANCoder().getDegrees());
     }
 
 }

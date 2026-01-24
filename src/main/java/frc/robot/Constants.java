@@ -26,26 +26,26 @@ public final class Constants {
     public static class SwerveModule0{
       public static final int drive_id = 36;
       public static final int turn_id = 61;
-      public static final int CAN_coder_id = 8;
-      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(339.3);
+      public static final int CAN_coder_id = 1; // 8
+      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(187.3); // 339.3
     }
     public static class SwerveModule1{
       public static final int drive_id = 53;
       public static final int turn_id = 52;
-      public static final int CAN_coder_id = 1;
-      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(187.3);
+      public static final int CAN_coder_id = 2; // 1
+      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(166.1); //187.3
     }
     public static class SwerveModule2{
       public static final int drive_id = 55;
       public static final int turn_id = 59;
-      public static final int CAN_coder_id = 2;
-      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(166.1);
+      public static final int CAN_coder_id = 3; // 2
+      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(148.2); // 166.1
     }
     public static class SwerveModule3{
       public static final int drive_id = 54;
-      public static final int turn_id = 58;
-      public static final int CAN_coder_id = 3;
-      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(148.2);
+      public static final int turn_id = 58; 
+      public static final int CAN_coder_id = 8; // 3
+      public static final Rotation2d turn_offset = Rotation2d.fromDegrees(339.3); // 148.2
     }
     public static class conversion_factors {
     
@@ -61,16 +61,16 @@ public final class Constants {
     
     public static class PID_constants {
 
-      public static final double kP = 0.00759;
+      public static final double kP = 0.00759; // 0.00759
       
-      public static final double kI = 0.00069;
+      public static final double kI = 0.00069; // 0.0069
     
-      public static final double kD = 0.0001;
+      public static final double kD = 0.0001; // 0.0001
 
     }
-    public static final double max_speed = 5;
-    public static final double max_angular_speed = 7.0;
 
+    public static final double max_speed = 5;//5
+    public static final double max_angular_speed = 3.5;//7
     public static final double robot_length = Units.inchesToMeters(25);
     public static final double robot_width = Units.inchesToMeters(25);
 
@@ -80,10 +80,10 @@ public final class Constants {
     public static final Translation2d FrontLeft = new Translation2d(robot_length / 2, robot_width / 2);
 
     public static final SwerveDriveKinematics swerve_kinematics = new SwerveDriveKinematics(
-      FrontRight,
-      BackRight,
-      BackLeft,
-      FrontLeft);
+      FrontLeft,//FrontRight
+      FrontRight,//BackRight
+      BackRight,//BackLeft
+      BackLeft);//FrontLeft
   }
   //Constants for PathPlanner
   public static class PathPlanner{
